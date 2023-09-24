@@ -18,16 +18,16 @@
 \title{Impacto da criptografia da camada de transporte em análises de fluxos com aprendizado de máquina}
 
 \author{
-    Tiago de Carvalho Magnus\inst{1}, Jéferson de Campos Nobre\inst{1}
+    %Tiago de Carvalho Magnus\inst{1}, Jéferson de Campos Nobre\inst{1}
 }
 
 \address{
-     Instituto de Informática -- Universidade Federal do Rio Grande do Sul
-   (UFRGS)\\
-   Caixa Postal 15.064 -- 91.501-970 -- Porto Alegre -- RS -- Brazil
-   \email{\{tcmagnus,jcnobre\}@inf.ufrgs.br}
+%     Instituto de Informática -- Universidade Federal do Rio Grande do Sul
+%   (UFRGS)\\
+%   Caixa Postal 15.064 -- 91.501-970 -- Porto Alegre -- RS -- Brazil
+%   \email{\{tcmagnus,jcnobre\}@inf.ufrgs.br}
 }
-%\def\instnum{} % Making \instnum empty
+\def\instnum{} % Making \instnum empty
 
 \begin{document}
 
@@ -45,40 +45,55 @@
 \label{cap:introducao}
 
 % contexto 1
-A análise de tráfego de rede é uma das principais técnicas utilizadas para detectar atividades maliciosas, como \emph{malware}, ataques de negação de serviço (DDoS), \emph{phishing} e roubo de dados \cite{joshi2015review}. Dentre as diferentes formas de análise de tráfego de rede, estão a inspeção profunda de pacotes (\emph{Deep Packet Inspection}), que analisa o conteúdo detalhado dos pacotes capturados, e a análise de tráfego de rede baseada em fluxos, que analisa o tráfego de rede a partir de fluxos de tráfego extraídos da captura de pacotes. Sendo que a última tende a ser mais eficiente em termos de custo computacional, porém, pode ser menos eficiente em termos de detecção de anomalias e ataques cibernéticos \cite{boukhtouta2016network}.
+Existem diversas formas de análise de tráfego de rede, como a inspeção profunda de pacotes (\emph{Deep Packet Inspection}), que analisa o conteúdo detalhado dos pacotes capturados, e a análise de tráfego de rede baseada em fluxos, que analisa o tráfego de rede a partir de fluxos de tráfego extraídos da captura de pacotes. A DPI é mais eficiente que a análise baseada em fluxos, porém, pode ser computacionalmente mais custosa. A análise baseada em fluxos, por sua vez, tende a ser mais eficiente em termos de custo computacional, porém, pode ser menos eficiente em termos de detecção de anomalias e ataques cibernéticos \cite{boukhtouta2016network}.
+A análise de tráfego de rede é uma das principais técnicas utilizadas para detectar atividades maliciosas, como malware, ataques de negação de serviço (DDoS), \emph{phishing} e roubo de dados \cite{joshi2015review}.
 
 % contexto 2
-A captura de pacotes (pcap), tradicionalmente utilizada no contexto da biblioteca \emph{libpcap}, é uma das principais formas de análise passiva de redes, sendo extensivamente utilizada por administradores de rede e por sistemas de detecção de intrusão (\emph{Intrusion Detection System}) \cite{alias2013study}. A partir da captura de pacotes, é possível extrair estatísticas sobre o tráfego coletado, como o número de \emph{bytes} transferidos, o número de pacotes enviados, o tempo de resposta, entre outros. Essa extração de informações é feita através dos cabeçalhos dos pacotes e do agrupamento dos mesmos em fluxos de tráfego, que são agrupados de acordo com alguma característica, como o endereço IP de origem e destino.
+A captura de pacotes (pcap), tradicionalmente utilizada no contexto da biblioteca \emph{libpcap}, é uma das principais formas de análise passiva de redes, sendo extensivamente utilizada por administradores de rede e por sistemas de detecção de intrusão (\emph{Intrusion Detection System}) \cite{alias2013study}. A partir da captura de pacotes, é possível extrair informações sobre o tráfego analisado, como o número de \emph{bytes} transferidos, o número de pacotes enviados, o tempo de resposta, entre outros. Essa extração de informações é feita através dos cabeçalhos dos pacotes e do agrupamento dos mesmos em fluxos de tráfego, que são agrupados de acordo com alguma característica, como o endereço IP de origem e destino.
 
 % contexto 3
-A detecção de anomalias é uma técnica de análise de dados que busca identificar padrões incomuns ou desvios em relação a um comportamento esperado. Em redes de computadores, a detecção de anomalias pode ser utilizada para identificar atividades suspeitas que possam indicar a presença de um ataque cibernético em andamento.
-Essa técnica é frequentemente utilizada em conjunto com técnicas de criptografia de dados e aprendizado de máquina para identificar e mitigar ameaças de segurança em tempo real \cite{bhuyan2013network}.
+A detecção de anomalias é uma técnica de análise de dados que busca identificar padrões incomuns ou desvios em relação a um comportamento esperado. Em redes de computadores, a detecção de anomalias pode ser utilizada para identificar atividades suspeitas que possam indicar a presença de um ataque cibernético em andamento. Existem diversas técnicas de detecção de anomalias, como \emph{clustering}, redes neurais e árvores de decisão \cite{usama2019unsupervised}. A detecção de anomalias é frequentemente utilizada em conjunto com técnicas de criptografia de dados e aprendizado de máquina para identificar e mitigar ameaças de segurança em tempo real \cite{bhuyan2013network}.
 
 % contexto 4
-A criptografia de dados é uma técnica essencial para garantir a privacidade e segurança das informações que trafegam em redes de comunicação. No entanto, a implementação desse tipo de técnica pode interferir na análise de tráfego de rede, que é crucial para a detecção de anomalias e ataques cibernéticos. Recentemente, diversos protocolos da camada de aplicação têm incorporado a criptografia, sendo a migração do protocolo HTTP para HTTPS o caso mais notável. Apesar dessas novas implementações, a criptografia de dados em protocolos da camada de transporte, como o protocolo TCP, ainda é pouco explorada, apesar de já possuir propostas, como visto em \cite{bittau2010case}, \cite{rfc8547} e \cite{rfc8548}, que propõem a aplicação de criptografia oportunística.
+A criptografia de dados é uma técnica essencial para garantir a privacidade e segurança das informações que trafegam em redes de comunicação. Porém, a implementação desse tipo de técnica pode interferir na análise de tráfego de rede, que é crucial para a detecção de anomalias e ataques cibernéticos. Recentemente, cada vez mais protocolos da camada de aplicação têm sido criptografados, como a migração do protocolo HTTP para HTTPS, ou a implementação de criptografia no protocolo FTP. Porém, a criptografia de dados em protocolos da camada de transporte, como o protocolo TCP, é ainda pouco explorada, apesar de já possuir propostas de extensão, como visto em \cite{bittau2010case}, \cite{rfc8547} e \cite{rfc8548}, que propõem a aplicação de criptografia oportunística.
 
 % trabalho atual
-Apesar da criptografia de dados na camada de aplicação, existem diversas metodologias para, mesmo assim, realizar a análise automatizada de fluxos de tráfego e derivar informações relevantes sobre o tráfego analisado, como visto em \cite{karagiannis2005blinc} e \cite{rezaei2019deep}. No entanto, a maioria dessas análises não considera o impacto da criptografia dos dados da camada de transporte para a análise de fluxos. Os autores do \emph{framework} BLINC, por exemplo, afirmam que se os cabeçalhos dessa camada fossem criptografados, o tráfego de rede não poderia ser analisado \cite{boutaba2018comprehensive}.
+Apesar da criptografia de dados na camada de aplicação, existem diversas metodologias para, mesmo assim, realizar a análise automatizada de fluxos de tráfego e derivar informações relevantes sobre o tráfego analisado, como qual protocolo está sendo utilizado ou qual aplicação é responsável pelo tráfego gerado \cite{karagiannis2005blinc}. Os autores do \emph{framework} BLINC, por exemplo, afirmam que se os cabeçalhos da camada de transporte fossem criptografados, o tráfego de rede não poderia ser analisado \cite{boutaba2018comprehensive}.
 
-Esse artigo associa as perspectivas mencionadas para entender como a criptografia dos dados da camada de transporte nas comunicações de rede poderia afetar a análise automatizada de fluxos de tráfego e a detecção de anomalias a partir dos mesmos, independentemente do uso de criptografia nas camadas superiores à de transporte. Para isso, foram comparados os resultados obtidos de um modelo de aprendizado supervisionado treinado com fluxos de tráfego de rede não criptografados e de outro treinado com os mesmos fluxos, porém, sem as estatísticas obtidas a partir dos cabeçalhos da camada de transporte. Foi utilizado o \emph{framework} SHAP \cite{lundberg2017unified} para apresentar os resultados obtidos de forma mais explicativa.
+%%%Com o avanço nos desenvolvimentos de algoritmos de aprendizado de máquina, a interpretabilidade dos resultados desses algoritmos tem se tornado um problema cada vez mais importante. Isso porque, embora os algoritmos de aprendizado de máquina sejam capazes de produzir resultados precisos, eles podem se tornar difíceis de entender e explicar, dada a complexidade dos dados analisados e da relação interna entre eles. A falta de transparência em modelos de ML é um desafio significativo, pois pode dificultar a identificação de erros e aprimoramento do modelo \cite{linardatos2020explainable}.
+
+Esse artigo associa as perspectivas mencionadas para entender como a criptografia da camada de transporte nas comunicações de rede poderia afetar a análise automatizada de fluxos de tráfego e a detecção de anomalias a partir dos mesmos. Para isso, foram comparados os resultados obtidos de um modelo de aprendizado supervisionado treinado com fluxos de tráfego de rede não criptografados e de outro treinado com os mesmos fluxos de tráfego de rede, porém, sem as estatísticas obtidas a partir dos cabeçalhos da camada de transporte. Foi utilizado o \emph{framework} SHAP \cite{lundberg2017unified} para apresentar os resultados obtidos de forma mais explicativa.
 
 % estrutura
 O artigo está estruturado da seguinte forma. Na Seção \ref{cap:trabalhos} são apresentados alguns trabalhos relacionados, na Seção \ref{cap:analise} é proposta uma solução para realizar a investigação, que tem sua implementação e seus resultados apresentados na Seção \ref{cap:implementacao}. Como conclusão, a Seção \ref{cap:conclusao} expõe as considerações finais do estudo desenvolvido, além de proposições para possíveis melhorias para essa pesquisa e trabalhos futuros.
 
+% \section{Explicabilidade}
+% \label{sec:explicabilidade}
+
+% Com o avanço nos desenvolvimentos de algoritmos de aprendizado de máquina, a interpretabilidade dos resultados desses algoritmos tem se tornado um problema cada vez mais importante. Isso porque, embora os algoritmos de aprendizado de máquina sejam capazes de produzir resultados precisos, eles podem se tornar difíceis de entender e explicar, dada a complexidade dos dados analisados e da relação interna entre eles. A falta de transparência em modelos de ML é um desafio significativo, pois pode dificultar a identificação de erros e aprimoramento do modelo. Diversas técnicas têm sido desenvolvidas para explicar os resultados de modelos de aprendizado de máquina, como o \textit{Local Interpretable Model-agnostic Explanations} (LIME) \cite{ribeiro2016should} ou o \textit{SHapley Additive exPlanations} (SHAP) \cite{linardatos2020explainable}.
+
+% \cite{lundberg2017unified} apresentam uma revisão sobre a interpretabilidade de modelos de aprendizado de máquina a partir do SHAP. De acordo com os autores, a interpretabilidade de modelos de aprendizado de máquina é uma área de pesquisa em desenvolvimento, que tem como objetivo explicar os resultados de modelos de aprendizado de máquina.
+
+% A metodologia presente no SHAP é baseada na teoria dos jogos, e tenta aumentar a interpretabilidade do modelo de máquina ao calcular os valores de importância de cada \textit{feature} para previsões individuais. Os autores propõem os valores SHAP como uma medida unificada da importância das \textit{features}.
+
+% SEÇÃO 2
+
 \section{Trabalhos relacionados}
 \label{cap:trabalhos}
 
-Em \cite{le2022classification}, é feita uma análise sobre como as \emph{features} dos fluxos de rede afetam o desempenho de algoritmos de aprendizado de máquina para detecção de anomalias, através da explicabilidade. Os autores utilizam os \emph{datasets} IotIDS20 \cite{ullah2020scheme} e NetFlow IoT V2 \cite{sarhan2022towards}, que contém fluxos de rede de dispositivos IoT. Os autores utilizam a técnica de \emph{ensemble} com algoritmos de \emph{Decision Tree (DT)} e \emph{Random Forest (RF)} e, em seguida, utilizam explicações locais e explicações globais do SHAP para analisar a importância das \emph{features} para a classificação. Analisando os diagramas SHAP gerados pelos autores, é possível notar que o algoritmo de DT considera que a porta de destino, o \emph{timestamp} e o identificador do fluxo (\emph{Flow\_ID}) impactam positivamente para classificar um tráfego como anomalia, com até cerca de 60 instâncias. Após isso, essas mesmas \emph{features} passam a impactar negativamente. O inverso acontece na classificação de tráfego como benigno. Além disso, na classificação de tráfego de ataque DoS, os autores observam que, com muitas instâncias, o algoritmo de RF depende, em grande parte, do protocolo de aplicação (\emph{L7\_PROTO}) para classificar o tráfego como ataque.
+Utilizando diversos \textit{datasets}, incluindo o CIC-IDS2017 \cite{sharafaldin2018toward}, \cite{gupta2022cse} apresentam algoritmos de \textit{deep learning} \textit{ensemble} que lidam com o desbalanceamento de classes para o uso em NIDS. Os autores utilizam um sistema multicamadas, com \textit{deep neural networks} (DNN) na primeira, XGBoost na segunda e \textit{random forest} na terceira camada. No CIC-IDS2017, o CSE-IDS proposto pelos autores apresenta acurácia de 92\% e taxa de detecção de ataques (\textit{Attack Detection Rate}) de 98\%.
 
-Utilizando diversos \textit{datasets}, incluindo o CIC-IDS2017 \cite{sharafaldin2018toward}, \cite{gupta2022cse} apresentam algoritmos de \textit{deep learning} \textit{ensemble} que lidam com o desbalanceamento de classes para o uso em NIDS. Os autores utilizam um sistema multicamadas, com \emph{deep neural networks (DNN)} na primeira, XGBoost na segunda e RF na terceira camada. No CIC-IDS2017, o CSE-IDS proposto pelos autores apresenta acurácia de 92\% e taxa de detecção de ataques (\textit{Attack Detection Rate}) de 98\%. \cite{al2022dealing} utilizam o XGBoost com os \textit{datasets} NSL-KDD \cite{tavallaee2009detailed} e CIC-IDS2017 para avaliar quais \emph{features} dos conjuntos de dados são mais relevantes para a classificação de tráfego, através das metodologias de \emph{feature selection} e \emph{oversampling}. Os autores relatam que o uso de estratégias de \emph{OneVsRest (OVR)} com o XGBoost apresenta melhores resultados, com acurácia acima de 99\% e \emph{f1 score} de 87\% no CIC-IDS2017.
+\cite{al2022dealing} utilizam o XGBoost com os \textit{datasets} NSL-KDD \cite{tavallaee2009detailed} e CIC-IDS2017 para avaliar quais \emph{features} dos conjuntos de dados são mais relevantes para a classificação de tráfego, através das metodologias de \emph{feature selection} e \emph{oversampling}. Os autores relatam que o uso de estratégias de \emph{OneVsRest (OVR)} com o XGBoost apresenta melhores resultados, com acurácia acima de 99\% e \emph{f1 score} de 87\% no CIC-IDS2017.
 
-Por fim, \cite{shen2023machine} apresentam uma vasta pesquisa detalhando as diversas metodologias e possíveis formas de realizar a análise de tráfego criptografado. Os autores ainda apresentam um modelo genérico para análise de tráfego criptografado, incluindo a coleta do tráfego, a representação desse, os métodos de análise e a avaliação de \emph{performance} desses métodos.
+Em \cite{le2022classification}, é feita uma análise sobre como as \emph{features} dos fluxos de rede afetam o desempenho de algoritmos de aprendizado de máquina para detecção de anomalias, através da explicabilidade. Os autores utilizam os \emph{datasets} IotIDS20 \cite{ullah2020scheme} e NetFlow IoT V2 \cite{sarhan2022towards}, que contém fluxos de rede de dispositivos IoT. Os autores utilizam a técnica de \emph{ensemble} com algoritmos de DT e RF e, em seguida, utilizam explicações locais e explicações globais do SHAP para analisar a importância das \emph{features} para a classificação.
+%%%Analisando os diagramas SHAP gerados pelos autores, é possível notar que o algoritmo de DT considera que a porta de destino, o \emph{timestamp} e o identificador do fluxo (\emph{Flow\_ID}) impactam positivamente para classificar um tráfego como anomalia, com até cerca de 60 instâncias. Após isso, essas mesmas \emph{features} passam a impactar negativamente. O inverso acontece na classificação de tráfego como benigno. Além disso, na classificação de tráfego de ataque DoS, os autores observam que, com muitas instâncias, o algoritmo de RF depende do protocolo de aplicação (\emph{L7\_PROTO}) para classificar o tráfego como ataque.
+
 % SEÇÃO 3
 
 \section{Análise proposta}
 \label{cap:analise}
 
-A eficiência de sistemas de detecção de intrusão e da segurança de redes dependem da velocidade em que ataques e ameaças são detectados. Por isso, conjuntos de tráfego de rede são extremamente necessários para o melhor desempenho das ferramentas utilizadas \cite{dijkhuizen2018survey}. Dentre os conjuntos de dados publicamente disponíveis, foi selecionado o CIC-IDS2017 \cite{sharafaldin2018toward} pois, além da captura de pacotes, o \emph{dataset} também possui os fluxos de tráfego da rede, que foram utilizados nessa análise. Os fluxos de rede anômalos foram gerados a partir de um conjunto de ataques de intrusão, como \emph{Brute Force}, \emph{Heartbleed}, \emph{Botnet}, \emph{Denial of Service (DoS)}, \emph{Distributed Denial of Service (DDoS)}, \emph{PortScan} e um conjunto de ataques \emph{web}, como \emph{SQL Injection} e \emph{Cross-site scripting (XSS)}. \cite{rosay2022multi} discutem em mais detalhes as \textit{features} e os ataques disponibilizados no \emph{dataset} CIC-IDS2017.
+A eficiência de sistemas de detecção de intrusão e da segurança de redes dependem da velocidade em que ataques e ameaças são detectados. Por isso, conjuntos de tráfego de rede são extremamente necessários para o melhor desempenho das ferramentas utilizadas \cite{dijkhuizen2018survey}. Dentre os conjuntos de dados publicamente disponíveis, foi selecionado o CIC-IDS2017 \cite{sharafaldin2018toward} pois, além da captura de pacotes, o \emph{dataset} também possui o fluxo de tráfego da rede, que é o que será utilizado nessa análise. Os fluxos de rede anômalos foram gerados a partir de um conjunto de ataques de intrusão, como \emph{Brute Force}, \emph{Heartbleed}, \emph{Botnet}, \emph{Denial of Service (DoS)}, \emph{Distributed Denial of Service (DDoS)}, \emph{PortScan} e um conjunto de ataques \emph{web}, como \emph{SQL Injection} e \emph{Cross-site scripting (XSS)}. \cite{rosay2022multi} discutem em mais detalhes as \textit{features} e os ataques disponibilizados no \emph{dataset} CIC-IDS2017.
 
 Os fluxos de rede do CIC-IDS2017 possuem informações detalhadas sobre a direção dos pacotes enviados. Portanto, algumas \textit{features} do \emph{dataset} possuem os prefixos \textit{bwd} e \textit{fwd}, que indicam, respectivamente, pacotes que foram enviados de um cliente para um servidor (uma requisição) ou do servidor para o cliente, a resposta para uma requisição. Por exemplo, a \textit{feature} \textit{fwd\_pkt\_len\_max} indica o tamanho máximo dos pacotes enviados do cliente para o servidor, enquanto a \textit{feature} \textit{bwd\_pkt\_len\_max} indica o tamanho máximo dos pacotes enviados do servidor para o cliente.
 
@@ -92,7 +107,9 @@ Após a correção dos dados, o \emph{dataset} LYCOS2017 possui quatorze classif
 \subsection{Criptografia da camada de transporte}
 \label{sec:criptografia}
 
-Para simular a criptografia dos dados relativos à camada de transporte, foi feita uma análise das \textit{features} estatísticas que foram obtidas através dos cabeçalhos da camada de transporte, como as portas de origem e destino, o número de sequência do pacote, o tamanho da janela e as \emph{flags} TCP. Identificadas as estatísticas, os campos correspondentes foram removidos dos fluxos. Uma descrição dos campos removidos pode ser vista abaixo:
+Os dados da camada de transporte são encontrados nos campos \emph{source port}, \emph{destination port}, \emph{sequence number}, \emph{acknowledgement number}, \emph{flags}, \emph{window size}, \emph{urgent pointer} e \emph{options}. Os dados relativos a esses campos serão ofuscados através da remoção das estatísticas de fluxo geradas a partir deles.
+
+Para simular a criptografia dos dados relativos à camada de transporte, foi feita uma análise das \textit{features} estatísticas que foram obtidas através desses dados. Os dados e estatísticas removidas do \textit{dataset} original são:
 
 \begin{itemize}
     \item \emph{src\_port} e \emph{dst\_port}: os números de portas de origem e destino dos fluxos de rede. Esses números são utilizados para identificar os processos que estão enviando e recebendo os dados;
@@ -232,7 +249,7 @@ Através do SHAP, foi possível obter uma análise mais detalhada dos resultados
     \label{fig:features_completo}
 \end{figure}
 
-No gráfico de sumário SHAP do modelo treinado com o \emph{dataset} completo, é possível observar que as \emph{features} relacionadas aos dados da camada de transporte, como porta de destino (\textit{dst\_port}) e a porta de origem (\textit{src\_port}), são bastante presentes entre as \emph{features} mais importantes. Porém, \emph{features} de metadados dos fluxos, como duração do fluxo e o intervalo entre pacotes são importantes para a detecção de alguns ataques, como DDoS e ataques \emph{web}.
+No gráfico de sumário SHAP do modelo treinado com o \emph{dataset} completo, é possível observar que as \emph{features} relacionadas aos dados da camada de transporte, como porta de destino (\textit{dst\_port}) e a porta de origem (\textit{src\_port}), são bastante presentes entre as \emph{features} mais importantes. Porém, \emph{features} de metadados dos fluxos, como duração do fluxo e o intervalo entre pacotes são importantes para a detecção de alguns ataques, como DDoS e de ataques web.
 
 \begin{figure}[h!]
     \centering
@@ -241,7 +258,7 @@ No gráfico de sumário SHAP do modelo treinado com o \emph{dataset} completo, �
     \label{fig:features_criptografado}
 \end{figure}
 
-Já no gráfico de sumário SHAP do modelo treinado com o \emph{dataset} criptografado, podemos notar que a \emph{feature} de duração do fluxo se mantém como a mais importante, enquanto que as \emph{features} relacionadas à variação de tamanho de pacotes e cabeçalhos dos pacotes dominam na detecção de todos os tipos de tráfego. Um detalhe importante é que \emph{features} que tinham pouca importância para o modelo com dados completos, como o tamanho mínimo dos \emph{headers} dos pacotes da origem do fluxo (\textit{fwd\_pkt\_hdr\_len\_min}) e o tamanho máximo dos pacotes no fluxo (\textit{pkt\_len\_max}), passam a ser importantes para o modelo com dados criptografados. Essa mudança pode indicar uma dependência entre as \emph{features}, que pode ser explorada para melhorar a performance dos modelos.
+Já no gráfico de sumário SHAP do modelo treinado com o \emph{dataset} criptografado, podemos notar que a \emph{feature} de duração do fluxo se mantém como a mais importante, enquanto que as \emph{features} relacionadas à variação de tamanho de pacotes e cabeçalhos dos pacotes dominam na detecção de todos os tipos de tráfego. Um detalhe importante é que \emph{features} que tinham pouca importância para o modelo com dados completos, como o tamanho mínimo dos headers dos pacotes da origem do fluxo (\textit{fwd\_pkt\_hdr\_len\_min}) e o tamanho máximo dos pacotes no fluxo (\textit{pkt\_len\_max}), passam a ser importantes para o modelo com dados criptografados. Essa mudança pode indicar uma dependência entre as \emph{features}, que pode ser explorada para melhorar a performance dos modelos.
 
 Nas subseções a seguir, serão apresentados os gráficos de sumário SHAP para cada classe, com as \emph{features} mais importantes para a classificação de cada fluxo como tráfego de determinado ataque ou tráfego benigno. Nesses gráficos, as \emph{features} são ordenadas de acordo com a importância para a classificação de cada fluxo, e as cores indicam o valor de cada \emph{feature} para o fluxo em questão. As cores mais azuis indicam valores mais baixos, enquanto as cores mais avermelhadas indicam valores mais altos. Além disso, a posição de cada ponto no gráfico indica o valor SHAP da \emph{feature} para aquele fluxo, sendo que valores mais altos indicam que a \emph{feature} teve um impacto positivo na sua classificação, enquanto valores mais baixos indicam que a \emph{feature} teve um impacto negativo na mesma classificação.
 
@@ -280,7 +297,7 @@ Para a detecção de DDoS, as figuras \ref{fig:summary_ddos_completo} e \ref{fig
     \label{fig:summary_ddos_completo}
 \end{figure}
 
-Com o \emph{dataset} completo, notamos que fluxos com \textit{bwd\_pkt\_len\_max} mais altos impactam positivamente na classificação de um fluxo como DDoS. No entanto, valores mais altos do tamanho máximo dos pacotes na direção oposta (\textit{fwd\_pkt\_len\_max}) impactam negativamente na classificação de um fluxo como DDoS. Uma \emph{feature} que chama atenção é a \textit{bwd\_tcp\_init\_win\_bytes}, que fica nos extremos dos valores SHAP, indicando que valores altos da \emph{feature} impactam positiva e negativamente, apesar de valores baixos da \emph{feature} impactarem somente de forma negativa. Essa variação de impacto reforça a ideia de que há uma relação de dependência entre as \emph{features}, dependendo dos seus valores.
+Com o \emph{dataset} completo, notamos que fluxos com \textit{bwd\_pkt\_len\_max} mais altos impactam positivamente na classificação de um fluxo como DDoS. No entanto, o valores mais altos do tamanho máximo dos pacotes na direção oposta (\textit{fwd\_pkt\_len\_max}) impacta negativamente na classificação de um fluxo como DDoS. Uma \emph{feature} que chama atenção é a \textit{bwd\_tcp\_init\_win\_bytes}, que fica nos extremos dos valores SHAP, indicando que valores altos da \emph{feature} impactam positiva e negativamente, apesar de valores baixos da \emph{feature} impactarem somente de forma negativa. Essa variação de impacto reforça a ideia de que há uma relação de dependência entre as \emph{features}, dependendo dos seus valores.
 
 \begin{figure}[h!]
     \centering
@@ -293,15 +310,46 @@ Sem os dados da camada de transporte, as \emph{features} direcionais dominam na 
 
 Em ambos os casos, altos valores da \textit{feature} da razão entre download e upload de pacotes (\textit{down\_up\_ratio}) indicam fortemente que um fluxo é do tipo DDoS.
 
+% \subsubsection{Detecção de ataques portscan}
+% \label{subsec:portscan}
+
+% Para a detecção de \emph{portscan}, as figuras \ref{fig:summary_portscan_completo} e \ref{fig:summary_portscan_criptografado} apresentam quais \emph{features} impactam mais na classificação de um fluxo como \emph{portscan}. Nesse tipo de ataque, a porta de destino, o uso da \textit{flag rst} e a duração do fluxo (\textit{flow\_duration}) são as \emph{features} mais importantes para classificar um fluxo como um ataque de \emph{portscan}.
+
+% \begin{figure}[]
+%     \centering
+%     \caption{Impacto das features na detecção de portscan - dataset completo}
+%     \includegraphics[width=0.8\textwidth]{figures/summary_portscan_completo.png}
+%     \caption*{Fonte: O autor}
+%     \label{fig:summary_portscan_completo}
+% \end{figure}
+
+% \begin{figure}[]
+%     \centering
+%     \caption{Impacto das features na detecção de portscan - dataset criptografado}
+%     \includegraphics[width=0.8\textwidth]{figures/summary_portscan_criptografado.png}
+%     \caption*{Fonte: O autor}
+%     \label{fig:summary_portscan_criptografado}
+% \end{figure}
+
+% Com base no \emph{dataset} completo, podemos observar que altas taxas de uso da \textit{flag rst} impactam positivamente na classificação de um fluxo como \emph{portscan}, enquanto que a falta deles indica que o fluxo pode não ser desse tipo. Por usar portas de destino raramente utilizadas, os fluxos de \emph{portscan} são facilmente detectados. No entanto, um atacante poderia limitar a faixa de portas escaneadas para evitar ser detectado.
+
+% Esse tipo de ataque também é caracterizado por ter um tempo de duração mais curto. Portanto, fluxos com \textit{flow\_duration} mais altos impactam negativamente na classificação de um fluxo como \emph{portscan}.
+
+% Sem os dados da camada de transporte, a \emph{feature} mais importante para a detecção de \emph{portscan} é a duração do fluxo. Fluxos com \textit{flow\_duration} mais altos impactam negativamente na classificação de um fluxo como \emph{portscan}. Dessa forma, podemos ver que o modelo classifica diversos fluxos como \emph{portscan} apenas por terem durações mais baixas.
+
 \section{Conclusão e trabalhos futuros}
 \label{cap:conclusao}
 
-Neste trabalho, foi proposta e implementada uma forma de avaliar a eficácia de modelos de aprendizado de máquina para a detecção de ataques em redes de computadores em situações onde os dados do cabeçalho da camada de transporte, como as portas de origem e destino e as \emph{flags} TCP, não estariam disponíveis. Dentre os modelos avaliados, foi possível perceber que a perda de informações da camada de transporte afetou o desempenho dos algoritmos em todas as métricas avaliadas, ainda que em pequena escala. Os resultados foram comparados com os obtidos por \cite{rosay2021cic}, que propuseram uma correção para o \emph{dataset} CIC-IDS2017.
+Neste trabalho, foi proposta e implementada uma forma de avaliar a eficácia de modelos de aprendizado de máquina para a detecção de ataques em redes de computadores em situações onde os dados relativos a camada de transporte, como as portas de origem e destino e as \emph{flags} TCP, não estariam disponíveis. Dentre os modelos avaliados, foi possível perceber que a perda de informações da camada de transporte afetou o desempenho dos algoritmos em todas as métricas avaliadas, ainda que em pequena escala. Os resultados foram comparados com os obtidos por \cite{rosay2021cic}, que propuseram uma correção para o \emph{dataset} CIC-IDS2017.
 
 Através da comparação das métricas de \emph{accuracy}, \emph{precision}, \emph{recall}, \emph{f1 score} e MCC, foi possível perceber que os algoritmos, quando usando o conjunto de dados original, obtiveram resultados melhores que todos os modelos avaliados por \cite{rosay2021cic}, porém, quando usando o conjunto de dados criptografado, os resultados foram piores que os obtidos pelo melhor modelo gerado pelos autores. Através da explicabilidade dos modelos, foi possível identificar quais \emph{features} impactam mais na classificação de um fluxo de rede como cada uma das diferentes classes de ataque, o que pode ser útil para a criação de novas técnicas de detecção de ataques e, também, para a criação de técnicas de ataque que evitem a detecção por sistemas de detecção de intrusão baseados em \emph{machine learning}.
 
 Para trabalhos futuros, é possível avaliar a eficácia de outros algoritmos de aprendizado de máquina, assim como diferentes \emph{datasets} para a detecção de ataques em redes de computadores. Além disso, seria interessante avaliar como a criptografia dos dados da camada de transporte afetaria outros protocolos, como o SCTP ou o QUIC.
 
+% \bibliographystyle{abntex2-alf}
+% \begin{CJK*}{UTF8}{gbsn}
+% \bibliography{biblio}
+% \end{CJK*}
 \bibliographystyle{sbc}
 \bibliography{sbc-template}
 
